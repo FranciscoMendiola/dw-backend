@@ -1,11 +1,19 @@
-package com.product;
+package com.product.api.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * Representa una Categoría con un ID, nombre, etiqueta y estado.
  */
+@Entity
+@Table(name = "category")
 public class Category {
 
+    
     /* El identificador único de la categoría. */
+    @Id
     private Integer category_id;
     /* El nombre de la categoría. */
     private String category;
@@ -14,6 +22,11 @@ public class Category {
     /* El estado de la categoría. */
     private Integer status;
 
+    /**
+     * Constructor por defecto para Category.
+     */
+    public Category() {}
+    
     /**
      * Construye una nueva Categoría con el ID, nombre, etiqueta y estado especificados.
      *
@@ -28,6 +41,7 @@ public class Category {
         this.tag = tag;
         this.status = status;
     }
+    
 
     /**
      * Devuelve el identificador único de la categoría.
