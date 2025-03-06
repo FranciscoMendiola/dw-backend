@@ -3,6 +3,7 @@ package com.product.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class CtrlCategory {
 	 * @return una lista de objetos Category que representan categorías de productos predefinida.
 	 */
 	@GetMapping
-	public List<Category> getCategories() {
+	public ResponseEntity<List<Category>> getCategories() {
 		return svc.getCategories();
 	}
 
@@ -44,7 +45,7 @@ public class CtrlCategory {
 	 * @return una lista de objetos Category que representan categorías de productos activas.
 	 */
 	@GetMapping("/active")
-	public List<Category> getActiveCategories() {
+	public ResponseEntity<List<Category>> getActiveCategories() {
 		return svc.getActiveCategories();
 	}
 
@@ -55,7 +56,7 @@ public class CtrlCategory {
 	 * @return un objeto Category que representa la categoría de productos
 	 */
 	@GetMapping("/{category_id}")
-	public Category getCategory(@PathVariable Integer category_id) {
+	public ResponseEntity<Category> getCategory(@PathVariable Integer category_id) {
 		return svc.getCategory(category_id);
 	}
 }
