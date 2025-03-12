@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 /**
- * Representa una Categoría con un ID, nombre, etiqueta y estado.
+ * Modelo una Categoría con un ID, nombre, etiqueta y estado.
  */
 @Entity
 @Table(name = "category")
