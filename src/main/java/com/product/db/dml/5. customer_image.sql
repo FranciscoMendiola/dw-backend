@@ -1,0 +1,22 @@
+INSERT INTO customer_image (customer_id, image, status) VALUE(1, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(2, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(3, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(4, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(5, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(6, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(7, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(8, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(9, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(10, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(11, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(12, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(13, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(14, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(15, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(16, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(17, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(18, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(19, "", 1);
+INSERT INTO customer_image (customer_id, image, status) VALUE(20, "", 1);
+
+SELECT * FROM customer_image;
