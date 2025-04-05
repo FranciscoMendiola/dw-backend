@@ -36,8 +36,19 @@ public class CtrlProduct {
 		return svc.getProducts();
 	}
 
+	@GetMapping("/active")
+	public ResponseEntity<List<DtoProductListOut>> getActiveProducts() {
+		return svc.getActiveProducts();
+	}
+
+	@GetMapping("/category/{category_id}")
+	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(
+			@PathVariable("category_id") Integer category_id) {
+		return svc.getProductsByCategory(category_id);
+	}
+
 	@GetMapping("/{id}")
-	public ResponseEntity<DtoProductOut> getProduct(@PathVariable Integer id) {
+	public ResponseEntity<DtoProductOut> getProduct(@PathVariable("id") Integer id) {
 		return svc.getProduct(id);
 	}
 
@@ -50,7 +61,8 @@ public class CtrlProduct {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponse> updateProduct(@PathVariable Integer id, @Valid @RequestBody DtoProductIn in,
+	public ResponseEntity<ApiResponse> updateProduct(@PathVariable("id") Integer id,
+			@Valid @RequestBody DtoProductIn in,
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());
@@ -58,13 +70,19 @@ public class CtrlProduct {
 		return svc.updateProduct(id, in);
 	}
 
+	@PatchMapping("/{id}/stock")
+	public ResponseEntity<ApiResponse> updateProductStock(@PathVariable("id") Integer id,
+			@Valid @RequestBody Integer newStock) {
+		return svc.updateProductStock(id, newStock);
+	}
+
 	@PatchMapping("/{id}/enable")
-	public ResponseEntity<ApiResponse> enableProduct(@PathVariable Integer id) {
+	public ResponseEntity<ApiResponse> enableProduct(@PathVariable("id") Integer id) {
 		return svc.enableProduct(id);
 	}
 
 	@PatchMapping("/{id}/disable")
-	public ResponseEntity<ApiResponse> disableProduct(@PathVariable Integer id) {
+	public ResponseEntity<ApiResponse> disableProduct(@PathVariable("id") Integer id) {
 		return svc.disableProduct(id);
 	}
 }

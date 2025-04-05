@@ -75,7 +75,7 @@ public class CtrlCategory {
 	 * @return un objeto Category que representa la categoría de productos
 	 */
 	@GetMapping("/{category_id}")
-	public ResponseEntity<Category> getCategory(@PathVariable Integer category_id) {
+	public ResponseEntity<Category> getCategory(@PathVariable("category_id") Integer category_id) {
 		return svc.getCategory(category_id);
 	}
 
@@ -133,7 +133,7 @@ public class CtrlCategory {
 	 * @param category_id el identificador único de la categoría a deshabilitar
 	 * @return una respuesta API indicando el resultado de la operación
 	 */
-	@PatchMapping("/{id}/disable")
+	@PatchMapping("/{category_id}/disable")
 	public ResponseEntity<ApiResponse> disableCategory(@PathVariable("category_id") Integer category_id) {
 		return svc.disableCategory(category_id);
 	}

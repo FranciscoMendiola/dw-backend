@@ -70,22 +70,19 @@ public class SvcCategoryImp implements SvcCategory {
      * @param category_id el identificador único de la categoría
      * @return ResponseEntity con un objeto Category que representa la categoría de
      *         productos
-     * @throws ApiException si el ID de la categoría no existe
+     * @throws ApiException      si el ID de la categoría no existe
      * @throws DBAccessException si hay un error de acceso a la base de datos
      */
     @Override
     public ResponseEntity<Category> getCategory(Integer category_id) {
         try {
-            Category category = repo.getCategory(category_id);
-            if (category == null) {
-                throw new ApiException(HttpStatus.NOT_FOUND, "El id de la categoría no existe");
-            }
+            Category category = validateCategoryId(category_id);
             return new ResponseEntity<>(category, HttpStatus.OK);
         } catch (DataAccessException e) {
             throw new DBAccessException(e);
         }
     }
-    
+
     /**
      * Crea una nueva categoría de productos con los datos proporcionados.
      *
@@ -178,21 +175,26 @@ public class SvcCategoryImp implements SvcCategory {
             throw new DBAccessException(e);
         }
     }
-	
-	/**
+
+    /**
      * Valida si una categoría con el ID especificado existe en la base de datos.
      *
      * @param category_id el identificador único de la categoría a validar
+     * @return la category asociada al category_id si existe
      * @throws ApiException      si el ID de la categoría no existe
      * @throws DBAccessException si hay un error de acceso a la base de datos
      */
-    private void validateCategoryId(Integer category_id) {
+    private Category validateCategoryId(Integer category_id) {
+        Category category;
         try {
-            if (repo.getCategory(category_id) == null) {
+            category = repo.getCategory(category_id);
+
+            if (category == null) {
                 throw new ApiException(HttpStatus.NOT_FOUND, "El id de la categoria no existe");
             }
         } catch (DataAccessException e) {
             throw new DBAccessException(e);
         }
+        return category;
     }
 }

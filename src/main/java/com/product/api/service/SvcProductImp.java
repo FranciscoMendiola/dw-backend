@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -52,14 +53,31 @@ public class SvcProductImp implements SvcProduct {
 	}
 
 	@Override
+	public ResponseEntity<List<DtoProductListOut>> getActiveProducts() {
+		try {
+			List<Product> products = repo.getActiveProducts();
+			return new ResponseEntity<>(mapper.fromProductList(products), HttpStatus.OK);
+		} catch (DataAccessException e) {
+			throw new DBAccessException(e);
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(Integer id) {
+		try {
+			List<Product> products = repo.getProductsByCategory(id);
+			return new ResponseEntity<>(mapper.fromProductList(products), HttpStatus.OK);
+		} catch (DataAccessException e) {
+			throw new DBAccessException(e);
+		}
+	}
+
+	@Override
 	public ResponseEntity<DtoProductOut> getProduct(Integer id) {
 		try {
-			DtoProductOut product = repo.getProduct(id);
-			if (product == null)
-				throw new ApiException(HttpStatus.NOT_FOUND, "El id del cliente no existe");
-
-			String image = readProductImageFile(id);
-			product.setImage(image);
+			DtoProductOut product = validateProductId(id);
+			List<String> images = readProductImagesFile(id);
+			product.setImages(images);
 
 			return new ResponseEntity<>(product, HttpStatus.OK);
 		} catch (DataAccessException e) {
@@ -105,6 +123,22 @@ public class SvcProductImp implements SvcProduct {
 	}
 
 	@Override
+	public ResponseEntity<ApiResponse> updateProductStock(Integer id, Integer newStock) {
+		try {
+			validateProductId(id);
+			Product product = repo.findById(id).get();
+			if (newStock < 0)
+				throw new ApiException(HttpStatus.BAD_REQUEST, "El stock no puede ser negativo");
+
+			product.setStock(newStock);
+			repo.save(product);
+			return new ResponseEntity<>(new ApiResponse("El stock del producto ha sido actualizado"), HttpStatus.OK);
+		} catch (DataAccessException e) {
+			throw new DBAccessException(e);
+		}
+	}
+
+	@Override
 	public ResponseEntity<ApiResponse> enableProduct(Integer id) {
 		try {
 			validateProductId(id);
@@ -130,45 +164,55 @@ public class SvcProductImp implements SvcProduct {
 		}
 	}
 
-	private void validateProductId(Integer id) {
+	private DtoProductOut validateProductId(Integer id) {
+		DtoProductOut product = repo.getProduct(id);
 		try {
-			if (repo.findById(id).isEmpty()) {
+			if (product == null) {
 				throw new ApiException(HttpStatus.NOT_FOUND, "El id del producto no existe");
 			}
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
 		}
+		return product;
 	}
 
-	private String readProductImageFile(Integer customer_id) {
+	private List<String> readProductImagesFile(Integer product_id) {
 		try {
-			ProductImage customerImage = repoProductImage.findByProduct_id(customer_id);
-			if (customerImage == null)
-				return "";
+			List<ProductImage> productImages = repoProductImage.findByProductId(product_id);
+			if (productImages.isEmpty())
+				return new ArrayList<>();
 
-			String imageUrl = customerImage.getImage();
+			// Crear una lista para almacenar las imágenes codificadas
+			List<String> encodedImages = new ArrayList<>();
 
-			// Si la URL comienza con "/" la eliminamos para obtener la ruta relativa
-			if (imageUrl.startsWith("/")) {
-				imageUrl = imageUrl.substring(1);
+			for (ProductImage productImage : productImages) {
+				String imageUrl = productImage.getImage();
+
+				// Si la URL comienza con "/", la eliminamos para obtener la ruta relativa
+				if (imageUrl.startsWith("/")) {
+					imageUrl = imageUrl.substring(1);
+				}
+
+				// Construir el Path
+				Path imagePath = Paths.get(uploadDir, imageUrl);
+
+				// Verifica que el archivo exista
+				if (!Files.exists(imagePath))
+					continue;
+
+				try {
+					// Leer los bytes de la imagen y codificarlos a Base64
+					byte[] imageBytes = Files.readAllBytes(imagePath);
+					String encodeImage = Base64.getEncoder().encodeToString(imageBytes);
+					encodedImages.add(encodeImage);
+				} catch (IOException e) {
+					throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR,
+							"Error al leer el archivo: " + imagePath.toString());
+				}
 			}
-
-			// Construir el Path
-			Path imagePath = Paths.get(uploadDir, imageUrl);
-
-			// Verifica que el archivo exista
-			if (!Files.exists(imagePath))
-				return "";
-
-			// Leer los bytes de la imagen y codificarlos a Base64
-			byte[] imageBytes = Files.readAllBytes(imagePath);
-			return Base64.getEncoder().encodeToString(imageBytes);
-
+			return encodedImages;
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
-		} catch (IOException e) {
-			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al leer el archivo");
 		}
 	}
-
 }
