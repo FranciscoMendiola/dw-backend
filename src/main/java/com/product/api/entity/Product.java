@@ -8,107 +8,58 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+/**
+ * Modelo de Producto con un ID, gtin, nombre, descripción, precio, stock y
+ * estado.
+ */
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
+@Getter
+@Setter
 @Entity
 @Table(name = "product")
 public class Product {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty("product_id")
 	@Column(name = "product_id")
+	@JsonProperty("product_id")
 	private Integer product_id;
-	
-	@JsonProperty("gtin")
+
 	@Column(name = "gtin")
+	@JsonProperty("gtin")
 	private String gtin;
 
-	@JsonProperty("product")
 	@Column(name = "product")
+	@JsonProperty("product")
 	private String product;
 
-	@JsonProperty("description")
 	@Column(name = "description")
+	@JsonProperty("description")
 	private String description;
 
-	@JsonProperty("price")
 	@Column(name = "price")
+	@JsonProperty("price")
 	private Float price;
-	
-	@JsonProperty("stock")
+
 	@Column(name = "stock")
+	@JsonProperty("stock")
 	private Integer stock;
 
-	@JsonProperty("category_id")
 	@Column(name = "category_id")
+	@JsonProperty("category_id")
 	private Integer category_id;
 
-	@JsonProperty("atatus")
 	@Column(name = "status")
+	@JsonProperty("status")
 	private Integer status;
-
-	public Integer getProduct_id() {
-		return product_id;
-	}
-
-	public void setProduct_id(Integer product_id) {
-		this.product_id = product_id;
-	}
-
-	public String getGtin() {
-		return gtin;
-	}
-
-	public void setGtin(String gtin) {
-		this.gtin = gtin;
-	}
-
-	public String getProduct() {
-		return product;
-	}
-
-	public void setProduct(String product) {
-		this.product = product;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Float getPrice() {
-		return price;
-	}
-
-	public void setPrice(Float price) {
-		this.price = price;
-	}
-
-	public Integer getStock() {
-		return stock;
-	}
-
-	public void setStock(Integer stock) {
-		this.stock = stock;
-	}
-
-	public Integer getCategory_id() {
-		return category_id;
-	}
-
-	public void setCategory_id(Integer category_id) {
-		this.category_id = category_id;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
 }

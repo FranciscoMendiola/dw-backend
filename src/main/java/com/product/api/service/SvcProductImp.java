@@ -27,11 +27,14 @@ import com.product.common.mapper.MapperProduct;
 import com.product.exception.ApiException;
 import com.product.exception.DBAccessException;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 @Service
 public class SvcProductImp implements SvcProduct {
 
 	@Autowired
-	private RepoProduct repo;
+	private RepoProduct repoProduct;
 
 	@Autowired
 	private RepoProductImage repoProductImage;
@@ -45,7 +48,7 @@ public class SvcProductImp implements SvcProduct {
 	@Override
 	public ResponseEntity<List<DtoProductListOut>> getProducts() {
 		try {
-			List<Product> products = repo.findAll();
+			List<Product> products = repoProduct.findAll();
 			return new ResponseEntity<>(mapper.fromProductList(products), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
@@ -55,7 +58,7 @@ public class SvcProductImp implements SvcProduct {
 	@Override
 	public ResponseEntity<List<DtoProductListOut>> getActiveProducts() {
 		try {
-			List<Product> products = repo.getActiveProducts();
+			List<Product> products = repoProduct.getActiveProducts();
 			return new ResponseEntity<>(mapper.fromProductList(products), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
@@ -65,7 +68,7 @@ public class SvcProductImp implements SvcProduct {
 	@Override
 	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(Integer id) {
 		try {
-			List<Product> products = repo.getProductsByCategory(id);
+			List<Product> products = repoProduct.getProductsByCategory(id);
 			return new ResponseEntity<>(mapper.fromProductList(products), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
@@ -89,7 +92,7 @@ public class SvcProductImp implements SvcProduct {
 	public ResponseEntity<ApiResponse> createProduct(DtoProductIn in) {
 		try {
 			Product product = mapper.fromDto(in);
-			repo.save(product);
+			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido registrado"), HttpStatus.CREATED);
 		} catch (DataAccessException e) {
 			if (e.getLocalizedMessage().contains("ux_product_gtin"))
@@ -108,7 +111,7 @@ public class SvcProductImp implements SvcProduct {
 		try {
 			validateProductId(id);
 			Product product = mapper.fromDto(id, in);
-			repo.save(product);
+			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido actualizado"), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			if (e.getLocalizedMessage().contains("ux_product_gtin"))
@@ -126,12 +129,12 @@ public class SvcProductImp implements SvcProduct {
 	public ResponseEntity<ApiResponse> updateProductStock(Integer id, Integer newStock) {
 		try {
 			validateProductId(id);
-			Product product = repo.findById(id).get();
+			Product product = repoProduct.findById(id).get();
 			if (newStock < 0)
 				throw new ApiException(HttpStatus.BAD_REQUEST, "El stock no puede ser negativo");
 
 			product.setStock(newStock);
-			repo.save(product);
+			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El stock del producto ha sido actualizado"), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
@@ -142,9 +145,9 @@ public class SvcProductImp implements SvcProduct {
 	public ResponseEntity<ApiResponse> enableProduct(Integer id) {
 		try {
 			validateProductId(id);
-			Product product = repo.findById(id).get();
+			Product product = repoProduct.findById(id).get();
 			product.setStatus(1);
-			repo.save(product);
+			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido activado"), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
@@ -155,9 +158,9 @@ public class SvcProductImp implements SvcProduct {
 	public ResponseEntity<ApiResponse> disableProduct(Integer id) {
 		try {
 			validateProductId(id);
-			Product product = repo.findById(id).get();
+			Product product = repoProduct.findById(id).get();
 			product.setStatus(0);
-			repo.save(product);
+			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido desactivado"), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
@@ -165,7 +168,7 @@ public class SvcProductImp implements SvcProduct {
 	}
 
 	private DtoProductOut validateProductId(Integer id) {
-		DtoProductOut product = repo.getProduct(id);
+		DtoProductOut product = repoProduct.getProduct(id);
 		try {
 			if (product == null) {
 				throw new ApiException(HttpStatus.NOT_FOUND, "El id del producto no existe");

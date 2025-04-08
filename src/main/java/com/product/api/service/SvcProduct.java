@@ -14,7 +14,6 @@ public interface SvcProduct {
 	public ResponseEntity<List<DtoProductListOut>> getProducts();
 
 	public ResponseEntity<List<DtoProductListOut>> getActiveProducts();
-
 	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(Integer id);
 	public ResponseEntity<DtoProductOut> getProduct(Integer id);
 

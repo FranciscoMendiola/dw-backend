@@ -22,12 +22,14 @@ import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 
 import jakarta.validation.Valid;
+import lombok.NoArgsConstructor;
 
 /**
  * Controlador REST que maneja solicitudes HTTP para categorías de productos.
  * Proporciona un endpoint para recuperar una lista de categorías de productos
  * predefinida.
  */
+@NoArgsConstructor
 @RestController
 @RequestMapping("/category")
 public class CtrlCategory {
@@ -38,11 +40,6 @@ public class CtrlCategory {
 	 */
 	@Autowired
 	private SvcCategory svc;
-
-	/**
-	 * Constructor por defecto para CtrlProduct.
-	 */
-	public CtrlCategory() {}
 
 	/**
 	 * Maneja solicitudes GET para recuperar una lista de categorías de productos.

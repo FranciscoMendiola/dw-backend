@@ -10,16 +10,14 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Controlador de excepciones REST para lanzamiento de excepciones personalizadas.
  */
+@NoArgsConstructor
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
-	/**
-	 * Constructor por defecto para RestExceptionHandler.
-	 */
-    public RestExceptionHandler() {}
 
 	/**
 	 * Maneja excepciones de tipo ApiException.

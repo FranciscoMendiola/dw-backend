@@ -23,7 +23,9 @@ import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 
 import jakarta.validation.Valid;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @RestController
 @RequestMapping("/product")
 public class CtrlProduct {

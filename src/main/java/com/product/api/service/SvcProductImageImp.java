@@ -23,6 +23,9 @@ import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 import com.product.exception.DBAccessException;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 @Service
 public class SvcProductImageImp implements SvcProductImage {
 

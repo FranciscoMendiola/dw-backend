@@ -15,21 +15,19 @@ import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 import com.product.exception.DBAccessException;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Implementación del servicio que maneja las operaciones de base de datos para
  * las categorías de productos.
  */
+@NoArgsConstructor
 @Service
 public class SvcCategoryImp implements SvcCategory {
 
     /* Repositorio que maneja las operaciones de base de datos. */
     @Autowired
     private RepoCategory repo;
-
-    /**
-     * Constructor por defecto para SvcCategoryImp.
-     */
-    SvcCategoryImp() {}
 
     /**
      * Devuelve una lista de categorías de productos ordenadas por nombre de
