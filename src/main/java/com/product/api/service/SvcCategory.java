@@ -34,11 +34,11 @@ public interface SvcCategory {
     /**
      * Devuelve una categoría de productos con el ID de categoría especificado.
      *
-     * @param category_id el identificador único de la categoría
+     * @param categoryId el identificador único de la categoría
      * @return ResponseEntity con un objeto Category que representa la categoría de
      *         productos
      */
-    public ResponseEntity<Category> getCategory(Integer category_id);
+    public ResponseEntity<Category> getCategory(Integer categoryId);
 
      /**
      * Crea una nueva categoría de productos con los datos proporcionados.
@@ -53,28 +53,28 @@ public interface SvcCategory {
     /**
      * Actualiza los datos de una categoría existente con el ID especificado.
      *
-     * @param category_id el identificador único de la categoría a actualizar
-     * @param in          objeto DtoCategoryIn con los nuevos datos de la categoría
+     * @param categoryId el identificador único de la categoría a actualizar
+     * @param in         objeto DtoCategoryIn con los nuevos datos de la categoría
      * @return ResponseEntity con un objeto ApiResponse que indica el resultado de
      *         la operación
      */
-    public ResponseEntity<ApiResponse> updateCategory(Integer category_id, DtoCategoryIn in);
+    public ResponseEntity<ApiResponse> updateCategory(Integer categoryId, DtoCategoryIn in);
 
     /**
      * Habilita una categoría de productos con el ID especificado.
      *
-     * @param category_id el identificador único de la categoría a habilitar
+     * @param categoryId el identificador único de la categoría a habilitar
      * @return ResponseEntity con un objeto ApiResponse que indica el resultado de
      *         la operación
      */
-    public ResponseEntity<ApiResponse> enableCategory(Integer category_id);
+    public ResponseEntity<ApiResponse> enableCategory(Integer categoryId);
     
     /**
      * Deshabilita una categoría de productos con el ID especificado.
      *
-     * @param category_id el identificador único de la categoría a deshabilitar
+     * @param categoryId el identificador único de la categoría a deshabilitar
      * @return ResponseEntity con un objeto ApiResponse que indica el resultado de
      *         la operación
      */
-    public ResponseEntity<ApiResponse> disableCategory(Integer category_id);
+    public ResponseEntity<ApiResponse> disableCategory(Integer categoryId);
 }

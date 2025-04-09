@@ -17,8 +17,8 @@ import lombok.ToString;
 @Setter
 public class DtoProductListOut {
 	
-	@JsonProperty("product_id")
-	private Integer product_id;
+	@JsonProperty("productId")
+	private Integer productId;
 	
 	@JsonProperty("gtin")
 	private String gtin;

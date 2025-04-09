@@ -16,13 +16,12 @@ public interface RepoProduct extends JpaRepository<Product, Integer> {
 	@Query(value = "SELECT p.*, c.category "
 			+ "FROM product p "
 			+ "INNER JOIN category c ON c.category_id = p.category_id "
-			+ "WHERE p.product_id = :product_id;", nativeQuery = true)
-	public DtoProductOut getProduct(Integer product_id);
+			+ "WHERE p.product_id = :productId;", nativeQuery = true)
+	public DtoProductOut getProduct(@Param("productId") Integer productId);
 
 	@Query(value = "SELECT * FROM product WHERE status = 1", nativeQuery = true)
 	public List<Product> getActiveProducts();
 
-	@Query(value = "SELECT * FROM product WHERE category_id = :category_id", nativeQuery = true)
-	public List<Product> getProductsByCategory(@Param("category_id") Integer category_id);
-
+	@Query(value = "SELECT * FROM product WHERE category_id = :categoryId", nativeQuery = true)
+	public List<Product> getProductsByCategory(@Param("categoryId") Integer categoryId);
 }

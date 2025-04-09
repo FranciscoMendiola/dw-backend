@@ -32,8 +32,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    @JsonProperty("category_id")
-    private Integer category_id;
+    @JsonProperty("categoryId")
+    private Integer categoryId;
     /* El nombre de la categoría. */
     @Column(name = "category")
     @JsonProperty("category")

@@ -41,7 +41,7 @@ public class DtoProductIn {
 	@JsonProperty("stock")
 	private Integer stock;
 
-	@NotNull(message="El category_id es obligatorio")
-	@JsonProperty("category_id")
-	private Integer category_id;
+	@NotNull(message = "El categoryId es obligatorio")
+	@JsonProperty("categoryId")
+	private Integer categoryId;
 }

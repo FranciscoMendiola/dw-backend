@@ -31,14 +31,14 @@ public class CtrlProductImage {
     @Autowired
     private SvcProductImage svc;
 
-    @GetMapping("/{product_id}")
-    public ResponseEntity<List<ProductImage>> getProductImages(@PathVariable("product_id") Integer product_id) {
-        return svc.getProductImages(product_id);
+    @GetMapping("/{productId}")
+    public ResponseEntity<List<ProductImage>> getProductImages(@PathVariable("productId") Integer productId) {
+        return svc.getProductImages(productId);
     }
 
-    @PatchMapping("/{product_image_id}")
-    public ResponseEntity<ApiResponse> deleteProductImage(@PathVariable("product_image_id") Integer product_image_id) {
-        return svc.deleteProductImage(product_image_id);
+    @PatchMapping("/{productImageId}")
+    public ResponseEntity<ApiResponse> deleteProductImage(@PathVariable("productImageId") Integer productImageId) {
+        return svc.deleteProductImage(productImageId);
     }
 
     @PostMapping

@@ -28,12 +28,12 @@ public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_image_id")
-    @JsonProperty("product_image_id")
-    private Integer product_image_id;
+    @JsonProperty("productImageId")
+    private Integer productImageId;
 
     @Column(name = "product_id")
-    @JsonProperty("product_id")
-    private Integer product_id;
+    @JsonProperty("productId")
+    private Integer productId;
 
     @Column(name = "image")
     @JsonProperty("image")

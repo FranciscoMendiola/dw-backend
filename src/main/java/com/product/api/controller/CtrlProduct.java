@@ -43,15 +43,15 @@ public class CtrlProduct {
 		return svc.getActiveProducts();
 	}
 
-	@GetMapping("/category/{category_id}")
+	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(
-			@PathVariable("category_id") Integer category_id) {
-		return svc.getProductsByCategory(category_id);
+			@PathVariable("categoryId") Integer categoryId) {
+		return svc.getProductsByCategory(categoryId);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<DtoProductOut> getProduct(@PathVariable("id") Integer id) {
-		return svc.getProduct(id);
+	@GetMapping("/{productId}")
+	public ResponseEntity<DtoProductOut> getProduct(@PathVariable("productId") Integer productId) {
+		return svc.getProduct(productId);
 	}
 
 	@PostMapping
@@ -62,29 +62,29 @@ public class CtrlProduct {
 		return svc.createProduct(in);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponse> updateProduct(@PathVariable("id") Integer id,
+	@PutMapping("/{productId}")
+	public ResponseEntity<ApiResponse> updateProduct(@PathVariable("productId") Integer productId,
 			@Valid @RequestBody DtoProductIn in,
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());
 
-		return svc.updateProduct(id, in);
+		return svc.updateProduct(productId, in);
 	}
 
-	@PatchMapping("/{id}/stock")
-	public ResponseEntity<ApiResponse> updateProductStock(@PathVariable("id") Integer id,
+	@PatchMapping("/{productId}/stock")
+	public ResponseEntity<ApiResponse> updateProductStock(@PathVariable("productId") Integer productId,
 			@Valid @RequestBody Integer newStock) {
-		return svc.updateProductStock(id, newStock);
+		return svc.updateProductStock(productId, newStock);
 	}
 
-	@PatchMapping("/{id}/enable")
-	public ResponseEntity<ApiResponse> enableProduct(@PathVariable("id") Integer id) {
-		return svc.enableProduct(id);
+	@PatchMapping("/{productId}/enable")
+	public ResponseEntity<ApiResponse> enableProduct(@PathVariable("productId") Integer productId) {
+		return svc.enableProduct(productId);
 	}
 
-	@PatchMapping("/{id}/disable")
-	public ResponseEntity<ApiResponse> disableProduct(@PathVariable("id") Integer id) {
-		return svc.disableProduct(id);
+	@PatchMapping("/{productId}/disable")
+	public ResponseEntity<ApiResponse> disableProduct(@PathVariable("productId") Integer productId) {
+		return svc.disableProduct(productId);
 	}
 }

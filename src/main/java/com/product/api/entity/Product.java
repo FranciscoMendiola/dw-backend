@@ -32,8 +32,8 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "product_id")
-	@JsonProperty("product_id")
-	private Integer product_id;
+	@JsonProperty("productId")
+	private Integer productId;
 
 	@Column(name = "gtin")
 	@JsonProperty("gtin")
@@ -56,8 +56,8 @@ public class Product {
 	private Integer stock;
 
 	@Column(name = "category_id")
-	@JsonProperty("category_id")
-	private Integer category_id;
+	@JsonProperty("categoryId")
+	private Integer categoryId;
 
 	@Column(name = "status")
 	@JsonProperty("status")

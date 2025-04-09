@@ -10,9 +10,9 @@ import com.product.common.dto.ApiResponse;
 
 public interface SvcProductImage {
 
-    public ResponseEntity<List<ProductImage>> getProductImages(Integer product_id);
+    public ResponseEntity<List<ProductImage>> getProductImages(Integer productId);
 
     public ResponseEntity<ApiResponse> createProductImage(DtoProductImageIn in);
 
-    public ResponseEntity<ApiResponse> deleteProductImage(Integer product_image_id);
+    public ResponseEntity<ApiResponse> deleteProductImage(Integer productImageId);
 }

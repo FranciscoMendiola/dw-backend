@@ -66,20 +66,25 @@ public class SvcProductImp implements SvcProduct {
 	}
 
 	@Override
-	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(Integer id) {
+	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(Integer categoriaId) {
 		try {
-			List<Product> products = repoProduct.getProductsByCategory(id);
+			List<Product> products = repoProduct.getProductsByCategory(categoriaId);
 			return new ResponseEntity<>(mapper.fromProductList(products), HttpStatus.OK);
 		} catch (DataAccessException e) {
+			String msg = e.getLocalizedMessage();
+			if (msg != null) {
+				if (msg.contains("fk_product_category"))
+					throw new ApiException(HttpStatus.NOT_FOUND, "El id de categoría no existe");
+			}
 			throw new DBAccessException(e);
 		}
 	}
 
 	@Override
-	public ResponseEntity<DtoProductOut> getProduct(Integer id) {
+	public ResponseEntity<DtoProductOut> getProduct(Integer productId) {
 		try {
-			DtoProductOut product = validateProductId(id);
-			List<String> images = readProductImagesFile(id);
+			DtoProductOut product = validateProductId(productId);
+			List<String> images = readProductImagesFile(productId);
 			product.setImages(images);
 
 			return new ResponseEntity<>(product, HttpStatus.OK);
@@ -95,41 +100,45 @@ public class SvcProductImp implements SvcProduct {
 			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido registrado"), HttpStatus.CREATED);
 		} catch (DataAccessException e) {
-			if (e.getLocalizedMessage().contains("ux_product_gtin"))
-				throw new ApiException(HttpStatus.CONFLICT, "El gtin del producto ya está registrado");
-			if (e.getLocalizedMessage().contains("ux_product_product"))
-				throw new ApiException(HttpStatus.CONFLICT, "El nombre del producto ya está registrado");
-			if (e.getLocalizedMessage().contains("fk_product_category"))
-				throw new ApiException(HttpStatus.NOT_FOUND, "El id de categoría no existe");
-
+			String msg = e.getLocalizedMessage();
+			if (msg != null) {
+				if (msg.contains("ux_product_gtin"))
+					throw new ApiException(HttpStatus.CONFLICT, "El gtin del producto ya está registrado");
+				if (msg.contains("ux_product_product"))
+					throw new ApiException(HttpStatus.CONFLICT, "El nombre del producto ya está registrado");
+				if (msg.contains("fk_product_category"))
+					throw new ApiException(HttpStatus.NOT_FOUND, "El id de categoría no existe");
+			}
 			throw new DBAccessException(e);
 		}
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> updateProduct(Integer id, DtoProductIn in) {
+	public ResponseEntity<ApiResponse> updateProduct(Integer productId, DtoProductIn in) {
 		try {
-			validateProductId(id);
-			Product product = mapper.fromDto(id, in);
+			validateProductId(productId);
+			Product product = mapper.fromDto(productId, in);
 			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido actualizado"), HttpStatus.OK);
 		} catch (DataAccessException e) {
-			if (e.getLocalizedMessage().contains("ux_product_gtin"))
-				throw new ApiException(HttpStatus.CONFLICT, "El gtin del producto ya está registrado");
-			if (e.getLocalizedMessage().contains("ux_product_product"))
-				throw new ApiException(HttpStatus.CONFLICT, "El nombre del producto ya está registrado");
-			if (e.getLocalizedMessage().contains("fk_product_category"))
-				throw new ApiException(HttpStatus.NOT_FOUND, "El id de categoría no existe");
-
+			String msg = e.getLocalizedMessage();
+			if (msg != null) {
+				if (msg.contains("ux_product_gtin"))
+					throw new ApiException(HttpStatus.CONFLICT, "El gtin del producto ya está registrado");
+				if (msg.contains("ux_product_product"))
+					throw new ApiException(HttpStatus.CONFLICT, "El nombre del producto ya está registrado");
+				if (msg.contains("fk_product_category"))
+					throw new ApiException(HttpStatus.NOT_FOUND, "El id de categoría no existe");
+			}
 			throw new DBAccessException(e);
 		}
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> updateProductStock(Integer id, Integer newStock) {
+	public ResponseEntity<ApiResponse> updateProductStock(Integer productId, Integer newStock) {
 		try {
-			validateProductId(id);
-			Product product = repoProduct.findById(id).get();
+			validateProductId(productId);
+			Product product = repoProduct.findById(productId).get();
 			if (newStock < 0)
 				throw new ApiException(HttpStatus.BAD_REQUEST, "El stock no puede ser negativo");
 
@@ -142,10 +151,10 @@ public class SvcProductImp implements SvcProduct {
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> enableProduct(Integer id) {
+	public ResponseEntity<ApiResponse> enableProduct(Integer productId) {
 		try {
-			validateProductId(id);
-			Product product = repoProduct.findById(id).get();
+			validateProductId(productId);
+			Product product = repoProduct.findById(productId).get();
 			product.setStatus(1);
 			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido activado"), HttpStatus.OK);
@@ -155,10 +164,10 @@ public class SvcProductImp implements SvcProduct {
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> disableProduct(Integer id) {
+	public ResponseEntity<ApiResponse> disableProduct(Integer productId) {
 		try {
-			validateProductId(id);
-			Product product = repoProduct.findById(id).get();
+			validateProductId(productId);
+			Product product = repoProduct.findById(productId).get();
 			product.setStatus(0);
 			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido desactivado"), HttpStatus.OK);
@@ -167,8 +176,8 @@ public class SvcProductImp implements SvcProduct {
 		}
 	}
 
-	private DtoProductOut validateProductId(Integer id) {
-		DtoProductOut product = repoProduct.getProduct(id);
+	private DtoProductOut validateProductId(Integer productId) {
+		DtoProductOut product = repoProduct.getProduct(productId);
 		try {
 			if (product == null) {
 				throw new ApiException(HttpStatus.NOT_FOUND, "El id del producto no existe");
@@ -179,9 +188,9 @@ public class SvcProductImp implements SvcProduct {
 		return product;
 	}
 
-	private List<String> readProductImagesFile(Integer product_id) {
+	private List<String> readProductImagesFile(Integer productId) {
 		try {
-			List<ProductImage> productImages = repoProductImage.findByProductId(product_id);
+			List<ProductImage> productImages = repoProductImage.findByProductId(productId);
 			if (productImages.isEmpty())
 				return new ArrayList<>();
 

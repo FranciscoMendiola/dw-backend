@@ -68,12 +68,12 @@ public class CtrlCategory {
 	 * Maneja solicitudes GET para recuperar una categoría de productos con el ID de
 	 * categoría especificado.
 	 *
-	 * @param category_id el identificador único de la categoría
+	 * @param categoryId el identificador único de la categoría
 	 * @return un objeto Category que representa la categoría de productos
 	 */
-	@GetMapping("/{category_id}")
-	public ResponseEntity<Category> getCategory(@PathVariable("category_id") Integer category_id) {
-		return svc.getCategory(category_id);
+	@GetMapping("/{categoryId}")
+	public ResponseEntity<Category> getCategory(@PathVariable("categoryId") Integer categoryId) {
+		return svc.getCategory(categoryId);
 	}
 
 	/**
@@ -96,42 +96,42 @@ public class CtrlCategory {
 	/**
 	 * Maneja solicitudes PUT para actualizar una categoría de productos existente.
 	 *
-	 * @param category_id   el identificador único de la categoría a actualizar
+	 * @param categoryId    el identificador único de la categoría a actualizar
 	 * @param in            los nuevos datos de la categoría
 	 * @param bindingResult el resultado de la validación de los datos de entrada
 	 * @return una respuesta API indicando el resultado de la operación
 	 * @throws ApiException si los datos de entrada no son válidos
 	 */
-	@PutMapping("/{category_id}")
-	public ResponseEntity<ApiResponse> updateCategory(@PathVariable("category_id") Integer category_id,
+	@PutMapping("/{categoryId}")
+			public ResponseEntity<ApiResponse> updateCategory(@PathVariable("categoryId") Integer categoryId,
 			@Valid @RequestBody DtoCategoryIn in, BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			throw new ApiException(HttpStatus.BAD_REQUEST,
 					bindingResult.getAllErrors().get(0).getDefaultMessage());
-		return svc.updateCategory(category_id, in);
+		return svc.updateCategory(categoryId, in);
 	}
 
 	/**
 	 * Maneja solicitudes PATCH para habilitar una categoría de productos
 	 * específica.
 	 *
-	 * @param category_id el identificador único de la categoría a habilitar
+	 * @param categoryId el identificador único de la categoría a habilitar
 	 * @return una respuesta API indicando el resultado de la operación
 	 */
-	@PatchMapping("/{category_id}/enable")
-	public ResponseEntity<ApiResponse> enableCategory(@PathVariable("category_id") Integer category_id) {
-		return svc.enableCategory(category_id);
+	@PatchMapping("/{categoryId}/enable")
+	public ResponseEntity<ApiResponse> enableCategory(@PathVariable("categoryId") Integer categoryId) {
+		return svc.enableCategory(categoryId);
 	}
 
 	/**
 	 * Maneja solicitudes PATCH para deshabilitar una categoría de productos
 	 * específica.
 	 *
-	 * @param category_id el identificador único de la categoría a deshabilitar
+	 * @param categoryId el identificador único de la categoría a deshabilitar
 	 * @return una respuesta API indicando el resultado de la operación
 	 */
-	@PatchMapping("/{category_id}/disable")
-	public ResponseEntity<ApiResponse> disableCategory(@PathVariable("category_id") Integer category_id) {
-		return svc.disableCategory(category_id);
+	@PatchMapping("/{categoryId}/disable")
+	public ResponseEntity<ApiResponse> disableCategory(@PathVariable("categoryId") Integer categoryId) {
+		return svc.disableCategory(categoryId);
 	}
 }

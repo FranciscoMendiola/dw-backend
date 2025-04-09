@@ -23,7 +23,7 @@ public class ApiResponse {
      */
     public ApiResponse(String message) {
         if (message == null || message.trim().isEmpty()) {
-            throw new IllegalArgumentException("El mensaje no puede ser nulo o vacío");
+            throw new IllegalArgumentException("El mensaje no puede ser vacío");
         }
         this.message = message;
     }

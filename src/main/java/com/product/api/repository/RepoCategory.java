@@ -37,11 +37,11 @@ public interface RepoCategory extends JpaRepository<Category, Integer> {
     /**
      * Devuelve una categoría de productos con el ID de categoría especificado.
      *
-     * @param category_id el identificador único de la categoría
+     * @param categoryId el identificador único de la categoría
      * @return un objeto Category que representa la categoría de productos
      */
-    @Query(value = "SELECT * FROM category WHERE category_id = :category_id", nativeQuery = true)
-    public Category getCategory(@Param("category_id") Integer category_id);
+    @Query(value = "SELECT * FROM category WHERE category_id = :categoryId", nativeQuery = true)
+    public Category getCategory(@Param("categoryId") Integer categoryId);
 
     /**
      * Inserta una nueva categoría en la base de datos con estado activo.
@@ -58,26 +58,25 @@ public interface RepoCategory extends JpaRepository<Category, Integer> {
      * Actualiza el nombre y la etiqueta de una categoría existente en la base de
      * datos.
      *
-     * @param category_id el identificador único de la categoría
-     * @param category    el nuevo nombre de la categoría
-     * @param tag         la nueva etiqueta de la categoría
+     * @param categoryId el identificador único de la categoría
+     * @param category   el nuevo nombre de la categoría
+     * @param tag        la nueva etiqueta de la categoría
      */
     @Modifying
     @Transactional
-    @Query(value = "UPDATE category SET category = :category, tag = :tag WHERE category_id = :category_id;", nativeQuery = true)
-    void updateCategory(@Param("category_id") Integer category_id, @Param("category") String category,
+    @Query(value = "UPDATE category SET category = :category, tag = :tag WHERE category_id = :categoryId;", nativeQuery = true)
+            void updateCategory(@Param("categoryId") Integer categoryId, @Param("category") String category,
             @Param("tag") String tag);
 
     /**
      * Actualiza el estado de una categoría en la base de datos.
      *
-     * @param category_id el identificador único de la categoría
-     * @param status      el nuevo estado de la categoría (1 para activo, 0 para
-     *                    inactivo)
+     * @param categoryId el identificador único de la categoría
+     * @param status     el nuevo estado de la categoría (1 para activo, 0 para
+     *                   inactivo)
      */
     @Modifying
     @Transactional
-    @Query(value = "UPDATE category SET status = :status WHERE category_id = :category_id;", nativeQuery = true)
-    void updateCategoryStatus(@Param("category_id") Integer category_id, @Param("status") Integer status);
-
+    @Query(value = "UPDATE category SET status = :status WHERE category_id = :categoryId;", nativeQuery = true)
+    void updateCategoryStatus(@Param("categoryId") Integer categoryId, @Param("status") Integer status);
 }

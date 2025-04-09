@@ -17,8 +17,8 @@ import lombok.ToString;
 public class DtoProductImageIn {
 
     @NotNull(message = "El productId es obligatorio")
-    @JsonProperty("product_id")
-    private Integer product_id;
+    @JsonProperty("productId")
+    private Integer productId;
 
     @NotNull(message = "El image es obligatorio")
     @JsonProperty("image")
