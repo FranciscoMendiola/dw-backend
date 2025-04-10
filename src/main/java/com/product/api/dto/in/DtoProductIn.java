@@ -32,12 +32,12 @@ public class DtoProductIn {
 	private String description;
 
 	@NotNull(message="El price es obligatorio")
-	@Min(value = 0)
+	@Min(value = 0, message = "El precio no puede ser negativo")
 	@JsonProperty("price")
 	private Float price;
 
 	@NotNull(message="El stock es obligatorio")
-	@Min(value = 0)
+	@Min(value = 0, message = "El stock no puede ser negativo")
 	@JsonProperty("stock")
 	private Integer stock;
 

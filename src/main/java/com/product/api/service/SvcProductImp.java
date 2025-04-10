@@ -139,8 +139,6 @@ public class SvcProductImp implements SvcProduct {
 		try {
 			validateProductId(productId);
 			Product product = repoProduct.findById(productId).get();
-			if (newStock < 0)
-				throw new ApiException(HttpStatus.BAD_REQUEST, "El stock no puede ser negativo");
 
 			product.setStock(newStock);
 			repoProduct.save(product);
