@@ -1,4 +1,4 @@
-package com.product.common.dto;
+package com.product.api.commons.dto;
 /**
  * Clase que representa una respuesta de la API con un mensaje.
  */
