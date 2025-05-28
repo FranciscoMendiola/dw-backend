@@ -1,6 +1,11 @@
 package com.product.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -11,29 +16,39 @@ import jakarta.persistence.Table;
 @Table(name = "category")
 public class Category {
 
-    
     /* El identificador único de la categoría. */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("category_id")
+    @Column(name = "category_id")
     private Integer category_id;
     /* El nombre de la categoría. */
+    @JsonProperty("category")
+    @Column(name = "category")
     private String category;
     /* La etiqueta asociada con la categoría. */
+    @JsonProperty("tag")
+    @Column(name = "tag")
     private String tag;
     /* El estado de la categoría. */
+    @JsonProperty("status")
+    @Column(name = "status")
     private Integer status;
 
     /**
      * Constructor por defecto para Category.
      */
-    public Category() {}
-    
+    public Category() {
+    }
+
     /**
-     * Construye una nueva Categoría con el ID, nombre, etiqueta y estado especificados.
+     * Construye una nueva Categoría con el ID, nombre, etiqueta y estado
+     * especificados.
      *
      * @param category_id el identificador único de la categoría
-     * @param category el nombre de la categoría
-     * @param tag la etiqueta asociada con la categoría
-     * @param status el estado de la categoría
+     * @param category    el nombre de la categoría
+     * @param tag         la etiqueta asociada con la categoría
+     * @param status      el estado de la categoría
      */
     public Category(Integer category_id, String category, String tag, Integer status) {
         this.category_id = category_id;
@@ -41,7 +56,6 @@ public class Category {
         this.tag = tag;
         this.status = status;
     }
-    
 
     /**
      * Devuelve el identificador único de la categoría.
@@ -78,7 +92,6 @@ public class Category {
     public void setCategory(String category) {
         this.category = category;
     }
-
 
     /**
      * Devuelve la etiqueta asociada con la categoría.
@@ -123,24 +136,27 @@ public class Category {
      */
     @Override
     public String toString() {
-        return String.format("{id=%d, category=%s, tag=%s, status=%d}",category_id,category,tag,status);
+        return String.format("{id=%d, category=%s, tag=%s, status=%d}", category_id, category, tag, status);
     }
-    
+
     /**
-    * Compara este objeto con el objeto especificado para determinar si son iguales.
-    * 
-    * @param o el objeto a comparar con este objeto
-    * @return {@code true} si los objetos son iguales; {@code false} en caso contrario
-    */ 
+     * Compara este objeto con el objeto especificado para determinar si son
+     * iguales.
+     * 
+     * @param o el objeto a comparar con este objeto
+     * @return {@code true} si los objetos son iguales; {@code false} en caso
+     *         contrario
+     */
     @Override
     public boolean equals(Object o) {
-        if (this == o) 
+        if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass()) 
+        if (o == null || getClass() != o.getClass())
             return false;
 
         Category category1 = (Category) o;
-        
-        return category_id.equals(category1.category_id) && category.equals(category1.category) && tag.equals(category1.tag);
+
+        return category_id.equals(category1.category_id) && category.equals(category1.category)
+                && tag.equals(category1.tag);
     }
 }
