@@ -20,26 +20,34 @@ import com.product.api.service.SvcProductImage;
 import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @RestController
 @RequestMapping("/product-image")
+@Tag(name = "Product Image", description = "Catálogo de imágenes de productos")
 public class CtrlProductImage {
 
     @Autowired
     private SvcProductImage svc;
 
-    @GetMapping("/{product_id}")
-    public ResponseEntity<List<ProductImage>> getProductImages(@PathVariable("product_id") Integer product_id) {
-        return svc.getProductImages(product_id);
+    @GetMapping("/{productId}")
+    @Operation(summary = "Consultar imágenes de producto", description = "Retorna una lista con todas las imágenes asociadas al id del producto")
+    public ResponseEntity<List<ProductImage>> getProductImages(@PathVariable("productId") Integer productId) {
+        return svc.getProductImages(productId);
     }
 
-    @PatchMapping("/{product_image_id}")
-    public ResponseEntity<ApiResponse> deleteProductImage(@PathVariable("product_image_id") Integer product_image_id) {
-        return svc.deleteProductImage(product_image_id);
+    @PatchMapping("/{productImageId}")
+    @Operation(summary = "Deshabilitar imagen", description = "Deshabilita la imagen asociada al id")
+    public ResponseEntity<ApiResponse> deleteProductImage(@PathVariable("productImageId") Integer productImageId) {
+        return svc.deleteProductImage(productImageId);
     }
 
     @PostMapping
+    @Operation(summary = "Registrar imagen", description = "Registra y asocia una nueva imagen como cadena en **base64** al id del producto")
     public ResponseEntity<ApiResponse> createProductImage(@Valid @RequestBody DtoProductImageIn in, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());

@@ -26,8 +26,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/error", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/info",
-                                        "/actuator/health")
+                                                        .requestMatchers("/", "/error", "/swagger-ui/**",
+                                                                        "/v3/api-docs/**", "/actuator/info",
+                                                        "/actuator/health")
                                 .permitAll()
 
                                 // Category
@@ -36,6 +37,8 @@ public class SecurityConfig {
 
                                 // Product
                                 .requestMatchers(HttpMethod.GET, "/product/active").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers(HttpMethod.POST, "/product/validate").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers(HttpMethod.PATCH, "/product/{productId}/stock").hasAnyAuthority("ADMIN", "CUSTOMER")
                                 .requestMatchers("/product/**").hasAuthority("ADMIN")
 
                                 // Product images

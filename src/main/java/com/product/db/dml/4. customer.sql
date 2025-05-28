@@ -19,4 +19,6 @@ INSERT INTO customer(name, surname, rfc, mail, phone_number, address, user_id, r
 INSERT INTO customer(name, surname, rfc, mail, phone_number, address, user_id, region_id, status) VALUES('Francisco', 'Mendoza', 'MEOF920101CDE', 'francisco.mendoza@mail.com', '5512345696', 'Av. Insurgentes 1919', 19, 4, 1);
 INSERT INTO customer(name, surname, rfc, mail, phone_number, address, user_id, region_id, status) VALUES('Carmen', 'Rivas', 'RIVC880202FGH', 'carmen.rivas@mail.com', '5512345697', 'Calle Reforma 2020', 20, 5, 0);
 
+INSERT INTO customer(name, surname, rfc, mail, phone_number, address, user_id, region_id, status) VALUES('Francisco', 'Javier', 'RIVC880202FGH', 'frank.men@mail.com', '5512345697', 'Calle Reforma 2020', 20, 5, 0);
+
 SELECT * FROM customer;

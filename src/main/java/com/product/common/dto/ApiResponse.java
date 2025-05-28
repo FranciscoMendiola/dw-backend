@@ -1,7 +1,15 @@
-package com.product.api.commons.dto;
+
+package com.product.common.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+
 /**
  * Clase que representa una respuesta de la API con un mensaje.
  */
+@Getter
+@Setter
 public class ApiResponse {
 
     /**
@@ -13,27 +21,12 @@ public class ApiResponse {
      * Constructor que inicializa la respuesta con un mensaje.
      *
      * @param message el mensaje de la respuesta
+     * @throws IllegalArgumentException si el mensaje es nulo o vacío
      */
     public ApiResponse(String message) {
-        super();
-        this.message = message;
-    }
-
-    /**
-     * Obtiene el mensaje de la respuesta.
-     *
-     * @return el mensaje de la respuesta
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * Establece un nuevo mensaje en la respuesta.
-     *
-     * @param message el nuevo mensaje de la respuesta
-     */
-    public void setMessage(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            throw new IllegalArgumentException("El mensaje no puede ser vacío");
+        }
         this.message = message;
     }
 }

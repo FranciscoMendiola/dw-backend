@@ -14,8 +14,8 @@ public interface RepoProductImage extends JpaRepository<ProductImage, Integer> {
     @Query(value = "SELECT pi.* " +
             "FROM product_image pi " +
             "INNER JOIN product p ON pi.product_id = p.product_id " +
-            "WHERE pi.product_id = :product_id " +
+            "WHERE pi.product_id = :productId " +
             "AND pi.status = 1 " +
             "AND p.status = 1", nativeQuery = true)
-    public List<ProductImage> findByProductId(Integer product_id);
+    public List<ProductImage> findByProductId(Integer productId);
 }

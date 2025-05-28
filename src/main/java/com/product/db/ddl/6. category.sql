@@ -9,5 +9,5 @@ CREATE TABLE category(
     PRIMARY KEY (category_id)
 );
 
-CREATE UNIQUE INDEX ux_category_category ON region(region);
-CREATE UNIQUE INDEX ux_category_tag ON region(tag);
+CREATE UNIQUE INDEX ux_category_category ON category(category);
+CREATE UNIQUE INDEX ux_category_tag ON category(tag);

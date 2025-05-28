@@ -15,21 +15,19 @@ import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 import com.product.exception.DBAccessException;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Implementación del servicio que maneja las operaciones de base de datos para
  * las categorías de productos.
  */
+@NoArgsConstructor
 @Service
 public class SvcCategoryImp implements SvcCategory {
 
     /* Repositorio que maneja las operaciones de base de datos. */
     @Autowired
     private RepoCategory repo;
-
-    /**
-     * Constructor por defecto para SvcCategoryImp.
-     */
-    SvcCategoryImp() {}
 
     /**
      * Devuelve una lista de categorías de productos ordenadas por nombre de
@@ -67,16 +65,16 @@ public class SvcCategoryImp implements SvcCategory {
     /**
      * Devuelve una categoría de productos con el ID de categoría especificado.
      *
-     * @param category_id el identificador único de la categoría
+     * @param categoryId el identificador único de la categoría
      * @return ResponseEntity con un objeto Category que representa la categoría de
      *         productos
      * @throws ApiException      si el ID de la categoría no existe
      * @throws DBAccessException si hay un error de acceso a la base de datos
      */
     @Override
-    public ResponseEntity<Category> getCategory(Integer category_id) {
+    public ResponseEntity<Category> getCategory(Integer categoryId) {
         try {
-            Category category = validateCategoryId(category_id);
+            Category category = validateCategoryId(categoryId);
             return new ResponseEntity<>(category, HttpStatus.OK);
         } catch (DataAccessException e) {
             throw new DBAccessException(e);
@@ -98,13 +96,16 @@ public class SvcCategoryImp implements SvcCategory {
     public ResponseEntity<ApiResponse> createCategory(DtoCategoryIn in) {
         try {
             repo.createCategory(in.getCategory(), in.getTag());
-            return new ResponseEntity<>(new ApiResponse("La categoria ha sido registrada"), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponse("La categoría ha sido registrada"), HttpStatus.CREATED);
         } catch (DataAccessException e) {
-            if (e.getLocalizedMessage().contains("ux_category"))
-                throw new ApiException(HttpStatus.CONFLICT, "El nombre de la categoria ya está registrado");
-            if (e.getLocalizedMessage().contains("ux_tag"))
-                throw new ApiException(HttpStatus.CONFLICT, "El tag de la categoria ya está registrado");
-
+            String msg = e.getLocalizedMessage();
+            if (msg != null) {
+                if (msg.contains("ux_category_category")) {
+                    throw new ApiException(HttpStatus.CONFLICT, "El nombre de la categoría ya está registrado");
+                } else if (msg.contains("ux_category_tag")) {
+                    throw new ApiException(HttpStatus.CONFLICT, "El tag de la categoría ya está registrado");
+                }
+            }
             throw new DBAccessException(e);
         }
     }
@@ -112,8 +113,8 @@ public class SvcCategoryImp implements SvcCategory {
     /**
      * Actualiza los datos de una categoría existente con el ID especificado.
      *
-     * @param category_id el identificador único de la categoría a actualizar
-     * @param in          objeto DtoCategoryIn con los nuevos datos de la categoría
+     * @param categoryId el identificador único de la categoría a actualizar
+     * @param in         objeto DtoCategoryIn con los nuevos datos de la categoría
      * @return ResponseEntity con un objeto ApiResponse que indica el resultado de
      *         la operación
      * @throws ApiException      si el ID de la categoría no existe o si el
@@ -121,17 +122,20 @@ public class SvcCategoryImp implements SvcCategory {
      * @throws DBAccessException si hay un error de acceso a la base de datos
      */
     @Override
-    public ResponseEntity<ApiResponse> updateCategory(Integer category_id, DtoCategoryIn in) {
+    public ResponseEntity<ApiResponse> updateCategory(Integer categoryId, DtoCategoryIn in) {
         try {
-            validateCategoryId(category_id);
-            repo.updateCategory(category_id, in.getCategory(), in.getTag());
+            validateCategoryId(categoryId);
+            repo.updateCategory(categoryId, in.getCategory(), in.getTag());
             return new ResponseEntity<>(new ApiResponse("La categoria ha sido actualizada"), HttpStatus.OK);
         } catch (DataAccessException e) {
-            if (e.getLocalizedMessage().contains("ux_category"))
-                throw new ApiException(HttpStatus.CONFLICT, "El nombre de la categoria ya está registrado");
-            if (e.getLocalizedMessage().contains("ux_tag"))
-                throw new ApiException(HttpStatus.CONFLICT, "El tag de la categoria ya está registrado");
-
+            String msg = e.getLocalizedMessage();
+            if (msg != null) {
+                if (msg.contains("ux_category_category")) {
+                    throw new ApiException(HttpStatus.CONFLICT, "El nombre de la categoría ya está registrado");
+                } else if (msg.contains("ux_category_tag")) {
+                    throw new ApiException(HttpStatus.CONFLICT, "El tag de la categoría ya está registrado");
+                }
+            }
             throw new DBAccessException(e);
         }
     }
@@ -139,17 +143,17 @@ public class SvcCategoryImp implements SvcCategory {
     /**
      * Habilita una categoría de productos con el ID especificado.
      *
-     * @param category_id el identificador único de la categoría a habilitar
+     * @param categoryId el identificador único de la categoría a habilitar
      * @return ResponseEntity con un objeto ApiResponse que indica el resultado de
      *         la operación
      * @throws ApiException      si el ID de la categoría no existe
      * @throws DBAccessException si hay un error de acceso a la base de datos
      */
     @Override
-    public ResponseEntity<ApiResponse> enableCategory(Integer category_id) {
+    public ResponseEntity<ApiResponse> enableCategory(Integer categoryId) {
         try {
-            validateCategoryId(category_id);
-            repo.updateCategoryStatus(category_id, 1);
+            validateCategoryId(categoryId);
+            repo.updateCategoryStatus(categoryId, 1);
             return new ResponseEntity<>(new ApiResponse("La categoria ha sido activada"), HttpStatus.OK);
         } catch (DataAccessException e) {
             throw new DBAccessException(e);
@@ -159,17 +163,17 @@ public class SvcCategoryImp implements SvcCategory {
     /**
      * Deshabilita una categoría de productos con el ID especificado.
      *
-     * @param category_id el identificador único de la categoría a deshabilitar
+     * @param categoryId el identificador único de la categoría a deshabilitar
      * @return ResponseEntity con un objeto ApiResponse que indica el resultado de
      *         la operación
      * @throws ApiException      si el ID de la categoría no existe
      * @throws DBAccessException si hay un error de acceso a la base de datos
      */
     @Override
-    public ResponseEntity<ApiResponse> disableCategory(Integer category_id) {
+    public ResponseEntity<ApiResponse> disableCategory(Integer categoryId) {
         try {
-            validateCategoryId(category_id);
-            repo.updateCategoryStatus(category_id, 0);
+            validateCategoryId(categoryId);
+            repo.updateCategoryStatus(categoryId, 0);
             return new ResponseEntity<>(new ApiResponse("La categoria ha sido desactivada"), HttpStatus.OK);
         } catch (DataAccessException e) {
             throw new DBAccessException(e);
@@ -179,15 +183,15 @@ public class SvcCategoryImp implements SvcCategory {
     /**
      * Valida si una categoría con el ID especificado existe en la base de datos.
      *
-     * @param category_id el identificador único de la categoría a validar
-     * @return la category asociada al category_id si existe
+     * @param categoryId el identificador único de la categoría a validar
+     * @return la category asociada al categoryId si existe
      * @throws ApiException      si el ID de la categoría no existe
      * @throws DBAccessException si hay un error de acceso a la base de datos
      */
-    private Category validateCategoryId(Integer category_id) {
+    private Category validateCategoryId(Integer categoryId) {
         Category category;
         try {
-            category = repo.getCategory(category_id);
+            category = repo.getCategory(categoryId);
 
             if (category == null) {
                 throw new ApiException(HttpStatus.NOT_FOUND, "El id de la categoria no existe");

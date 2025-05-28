@@ -23,6 +23,9 @@ import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 import com.product.exception.DBAccessException;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 @Service
 public class SvcProductImageImp implements SvcProductImage {
 
@@ -33,10 +36,10 @@ public class SvcProductImageImp implements SvcProductImage {
     private String uploadDir;
 
     @Override
-    public ResponseEntity<List<ProductImage>> getProductImages(Integer product_id) {
+    public ResponseEntity<List<ProductImage>> getProductImages(Integer productId) {
         try {
             // Obtener todas las imágenes asociadas al producto
-            List<ProductImage> productImages = repo.findByProductId(product_id);
+            List<ProductImage> productImages = repo.findByProductId(productId);
 
             // Lista para almacenar las imágenes que existen
             List<ProductImage> validProductImages = new ArrayList<>();
@@ -51,9 +54,9 @@ public class SvcProductImageImp implements SvcProductImage {
                     // Si la imagen existe, añadirla a la lista de imágenes válidas
                     validProductImages.add(productImage);
                 } else {
-                    // Si la imagen no existe, desactivarla en la base de datos
-                    productImage.setStatus(0); // 0 podría ser "desactivada"
-                    repo.save(productImage); // Guardar el cambio en la base de datos
+                    // Si la imagen no existe, se desactiva en la base de datos
+                    productImage.setStatus(0);
+                    repo.save(productImage);
                 }
             }
 
@@ -93,13 +96,13 @@ public class SvcProductImageImp implements SvcProductImage {
 
             // Crear la entidad ProductImage y guardar la URL en la base de datos
             ProductImage productImage = new ProductImage();
-            productImage.setProduct_id(in.getProduct_id());
+            productImage.setProductId(in.getProductId());
             productImage.setImage("img/product/" + fileName);
             productImage.setStatus(1);
 
             repo.save(productImage);
 
-            return new ResponseEntity<>(new ApiResponse("La imagen del producto ha sido agregada"), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse("La imagen del producto ha sido registrada"), HttpStatus.OK);
 
         } catch (DataAccessException e) {
             throw new DBAccessException(e);
@@ -109,9 +112,9 @@ public class SvcProductImageImp implements SvcProductImage {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> deleteProductImage(Integer product_image_id) {
+    public ResponseEntity<ApiResponse> deleteProductImage(Integer productImageId) {
         try {
-            ProductImage productImage = validateProductImageId(product_image_id);
+            ProductImage productImage = validateProductImageId(productImageId);
             productImage.setStatus(0);
             repo.save(productImage);
             return new ResponseEntity<>(new ApiResponse("La imagen ha sido eliminada"), HttpStatus.OK);
@@ -120,10 +123,10 @@ public class SvcProductImageImp implements SvcProductImage {
         }
     }
 
-    private ProductImage validateProductImageId(Integer product_image_id) {
+    private ProductImage validateProductImageId(Integer productImageId) {
         ProductImage productImage;
         try {
-            productImage = repo.findById(product_image_id).get();
+            productImage = repo.findById(productImageId).get();
             if (productImage == null) {
                 throw new ApiException(HttpStatus.NOT_FOUND, "El id de la imagen de producto no existe");
             }
