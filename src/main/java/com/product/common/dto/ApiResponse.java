@@ -1,7 +1,9 @@
+
 package com.product.common.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+
 
 /**
  * Clase que representa una respuesta de la API con un mensaje.
