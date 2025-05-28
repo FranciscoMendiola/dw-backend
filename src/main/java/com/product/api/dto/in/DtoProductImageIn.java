@@ -8,18 +8,18 @@ public class DtoProductImageIn {
 
     @JsonProperty("product_id")
     @NotNull(message = "El productId es obligatorio")
-    private Integer product_Id;
+    private Integer product_id;
 
     @JsonProperty("image")
     @NotNull(message = "El image es obligatorio")
     private String image;
 
     public Integer getProduct_id() {
-        return product_Id;
+        return product_id;
     }
 
-    public void setProduct_id(Integer product_Id) {
-        this.product_Id = product_Id;
+    public void setProduct_id(Integer product_id) {
+        this.product_id = product_id;
     }
 
     public String getImage() {

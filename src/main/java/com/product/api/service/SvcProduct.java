@@ -12,9 +12,16 @@ import com.product.common.dto.ApiResponse;
 public interface SvcProduct {
 
 	public ResponseEntity<List<DtoProductListOut>> getProducts();
+
+	public ResponseEntity<List<DtoProductListOut>> getActiveProducts();
+
+	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(Integer id);
 	public ResponseEntity<DtoProductOut> getProduct(Integer id);
+
 	public ResponseEntity<ApiResponse> createProduct(DtoProductIn in);
 	public ResponseEntity<ApiResponse> updateProduct(Integer id, DtoProductIn in);
+
+	public ResponseEntity<ApiResponse> updateProductStock(Integer id, Integer newStock);
 	public ResponseEntity<ApiResponse> enableProduct(Integer id);
 	public ResponseEntity<ApiResponse> disableProduct(Integer id);
 }
