@@ -134,7 +134,7 @@ public class CtrlCategory {
 	 * @return una respuesta API indicando el resultado de la operación
 	 */
 	@PatchMapping("/{id}/disable")
-	public ResponseEntity<ApiResponse> disableCategory(@PathVariable("category_id") Integer category_id) {
+	public ResponseEntity<ApiResponse> disableCategory(@PathVariable("id") Integer category_id) {
 		return svc.disableCategory(category_id);
 	}
 }
