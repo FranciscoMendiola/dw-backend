@@ -49,7 +49,7 @@ public class Product {
 
 	@Column(name = "price")
 	@JsonProperty("price")
-	private Float price;
+	private Double price;
 
 	@Column(name = "stock")
 	@JsonProperty("stock")

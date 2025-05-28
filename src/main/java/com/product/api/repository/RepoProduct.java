@@ -24,4 +24,8 @@ public interface RepoProduct extends JpaRepository<Product, Integer> {
 
 	@Query(value = "SELECT * FROM product WHERE category_id = :categoryId", nativeQuery = true)
 	public List<Product> getProductsByCategory(@Param("categoryId") Integer categoryId);
+
+	@Query(value = "SELECT * FROM product WHERE product = :product LIMIT 1", nativeQuery = true)
+	public Product findByProduct(@Param("product") String product);
+
 }

@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.product.api.dto.in.DtoProductIn;
+import com.product.api.dto.in.DtoStockIn;
+import com.product.api.dto.in.DtoValidateProductIn;
 import com.product.api.dto.out.DtoProductListOut;
 import com.product.api.dto.out.DtoProductOut;
 import com.product.api.entity.Product;
@@ -66,9 +68,9 @@ public class SvcProductImp implements SvcProduct {
 	}
 
 	@Override
-	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(Integer categoriaId) {
+	public ResponseEntity<List<DtoProductListOut>> getProductsByCategory(Integer categoryId) {
 		try {
-			List<Product> products = repoProduct.getProductsByCategory(categoriaId);
+			List<Product> products = repoProduct.getProductsByCategory(categoryId);
 			return new ResponseEntity<>(mapper.fromProductList(products), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			String msg = e.getLocalizedMessage();
@@ -135,12 +137,11 @@ public class SvcProductImp implements SvcProduct {
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> updateProductStock(Integer productId, Integer newStock) {
+	public ResponseEntity<ApiResponse> updateProductStock(Integer productId, DtoStockIn in) {
 		try {
-			validateProductId(productId);
-			Product product = repoProduct.findById(productId).get();
+			Product product = validateSimpleProductId(productId);
 
-			product.setStock(newStock);
+			product.setStock(product.getStock() + in.getQuantity());
 			repoProduct.save(product);
 			return new ResponseEntity<>(new ApiResponse("El stock del producto ha sido actualizado"), HttpStatus.OK);
 		} catch (DataAccessException e) {
@@ -186,6 +187,18 @@ public class SvcProductImp implements SvcProduct {
 		return product;
 	}
 
+	private Product validateSimpleProductId(Integer productId) {
+		Product product = repoProduct.findById(productId).orElse(null);
+		try {
+			if (product == null) {
+				throw new ApiException(HttpStatus.NOT_FOUND, "El id del producto no existe");
+			}
+		} catch (DataAccessException e) {
+			throw new DBAccessException(e);
+		}
+		return product;
+	}
+
 	private List<String> readProductImagesFile(Integer productId) {
 		try {
 			List<ProductImage> productImages = repoProductImage.findByProductId(productId);
@@ -221,6 +234,31 @@ public class SvcProductImp implements SvcProduct {
 				}
 			}
 			return encodedImages;
+		} catch (DataAccessException e) {
+			throw new DBAccessException(e);
+		}
+	}
+
+	@Override
+	public ResponseEntity<Integer> validateProduct(DtoValidateProductIn in) {
+		try {
+			Product product = repoProduct.findByProduct(in.getProduct());
+			if(product == null)
+				throw new ApiException(HttpStatus.BAD_REQUEST, "El producto con nombre: " + in.getProduct() + " no esta registrado.");
+
+			if(product.getStatus() == 0)
+				throw new ApiException(HttpStatus.FORBIDDEN, "El producto con nombre: " + in.getProduct() + " no esta disponible.");
+
+			if(!product.getGtin().equals(in.getGtin()))
+				throw new ApiException(HttpStatus.FORBIDDEN, "El producto con nombre: " + in.getProduct() + " y el gtin proporcionado no coincide con el registrado en base de datos.");
+
+			if(Math.abs(product.getPrice() - in.getPrice()) > 0)
+				throw new ApiException(HttpStatus.FORBIDDEN, "El producto con nombre: " + in.getProduct() + " y el precio unitario proporcionado no coincide con el registrado en base de datos.");
+
+			if(product.getStock()-in.getQuantity() < 0)
+				throw new ApiException(HttpStatus.FORBIDDEN, "El producto con nombre: " + in.getProduct() + " cuenta con un stock de " + product.getStock() +".");
+
+			return new ResponseEntity<>(product.getProductId(), HttpStatus.OK);
 		} catch (DataAccessException e) {
 			throw new DBAccessException(e);
 		}

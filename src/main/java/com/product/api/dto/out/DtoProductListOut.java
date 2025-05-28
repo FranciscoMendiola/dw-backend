@@ -27,7 +27,7 @@ public class DtoProductListOut {
 	private String product;
 
 	@JsonProperty("price")
-	private Float price;
+	private Double price;
 
 	@JsonProperty("status")
 	private Integer status;

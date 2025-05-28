@@ -37,6 +37,8 @@ public class SecurityConfig {
 
                                 // Product
                                 .requestMatchers(HttpMethod.GET, "/product/active").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers(HttpMethod.POST, "/product/validate").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers(HttpMethod.PATCH, "/product/{productId}/stock").hasAnyAuthority("ADMIN", "CUSTOMER")
                                 .requestMatchers("/product/**").hasAuthority("ADMIN")
 
                                 // Product images

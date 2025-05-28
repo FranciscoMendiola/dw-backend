@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.product.api.dto.in.DtoProductIn;
+import com.product.api.dto.in.DtoStockIn;
+import com.product.api.dto.in.DtoValidateProductIn;
 import com.product.api.dto.out.DtoProductListOut;
 import com.product.api.dto.out.DtoProductOut;
 import com.product.api.service.SvcProduct;
@@ -81,11 +83,11 @@ public class CtrlProduct {
 		return svc.updateProduct(productId, in);
 	}
 
-	@PatchMapping("/{productId}/stock")
+	@PutMapping("/{productId}/stock")
 	@Operation(summary = "Actualizar stock de producto", description = "Actualiza el stock del producto asociado al id")
 	public ResponseEntity<ApiResponse> updateProductStock(@PathVariable("productId") Integer productId,
-			@Valid @RequestBody Integer newStock) {
-		return svc.updateProductStock(productId, newStock);
+			@Valid @RequestBody DtoStockIn in) {
+		return svc.updateProductStock(productId, in);
 	}
 
 	@PatchMapping("/{productId}/enable")
@@ -98,5 +100,14 @@ public class CtrlProduct {
 	@Operation(summary = "Deshabilitar producto", description = "Deshabilita el producto asociado al id")
 	public ResponseEntity<ApiResponse> disableProduct(@PathVariable("productId") Integer productId) {
 		return svc.disableProduct(productId);
+	}
+
+	@PostMapping("/validate")
+	@Operation(summary = "Validar producto", description = "Valida que un producto este registrado y haya stock suficiente")
+	public ResponseEntity<Integer> validateProduct(@Valid @RequestBody DtoValidateProductIn in, BindingResult bindingResult) {
+		if (bindingResult.hasErrors())
+			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());
+
+		return svc.validateProduct(in);
 	}
 }

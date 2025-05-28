@@ -34,7 +34,7 @@ public class DtoProductIn {
 	@NotNull(message="El price es obligatorio")
 	@Min(value = 0, message = "El precio no puede ser negativo")
 	@JsonProperty("price")
-	private Float price;
+	private Double price;
 
 	@NotNull(message="El stock es obligatorio")
 	@Min(value = 0, message = "El stock no puede ser negativo")
